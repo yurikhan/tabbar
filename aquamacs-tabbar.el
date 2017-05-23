@@ -648,7 +648,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
 		       )
 		    "")
 		  ) "")))
-      (concat close-button display-label key-label tabbar-separator-value)))
+      (concat display-label key-label tabbar-separator-value)))
 
 (defun tabbar-dummy-line-buttons (&optional noscroll)
   "Return a list of propertized strings for placeholders for the tab bar buttons.
