@@ -417,16 +417,17 @@ if specified), in current window."
 If optional MARGIN is non-nil, it must be a number of pixels to add as
 an extra margin around the image.  If optional NOMASK is non-nil, no mask
 property is included."
-  (let ((plist (cdr image)))
-    (or (plist-get plist :ascent)
-        (setq plist (plist-put plist :ascent 'center)))
-    (or (plist-get plist :mask)
-        (unless nomask
-	    (setq plist (plist-put plist :mask '(heuristic t)))))
-    (or (not (natnump margin))
-        (plist-get plist :margin)
-        (plist-put plist :margin margin))
-    (setcdr image plist))
+  (when image
+    (let ((plist (cdr image)))
+      (or (plist-get plist :ascent)
+          (setq plist (plist-put plist :ascent 'center)))
+      (or (plist-get plist :mask)
+          (unless nomask
+            (setq plist (plist-put plist :mask '(heuristic t)))))
+      (or (not (natnump margin))
+          (plist-get plist :margin)
+          (plist-put plist :margin margin))
+      (setcdr image plist)))
   image)
 
 ;; use images for tabbar buttons
