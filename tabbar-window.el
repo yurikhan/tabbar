@@ -754,10 +754,15 @@ shown in DEST-WINDOW."
 (defun tabbar-line ()
   "Return the header line templates that represent the tab bar.
 Update the templates if tabbar-template is currently nil."
-  (tabbar-current-tabset t)
-  (if tabbar-current-tabset
-      (or (tabbar-template tabbar-current-tabset)
-	  (tabbar-line-format tabbar-current-tabset))))
+  (cond
+   ((run-hook-with-args-until-success 'tabbar-inhibit-functions)
+    ;; Don't show the tab bar.
+    (setq header-line-format nil))
+   (t
+    (tabbar-current-tabset t)
+    (if tabbar-current-tabset
+        (or (tabbar-template tabbar-current-tabset)
+            (tabbar-line-format tabbar-current-tabset))))))
 
 (defun tabbar-window-current-tabset (&optional window)
   ;; ensure we don't count minibuffer as selected window - causes infinite loop
@@ -820,7 +825,7 @@ Run as `tabbar-init-hook'."
 	tabbar-home-help-function nil
 	tabbar-home-button-value nil
 	tabbar-cycle-scope 'tabs
-	tabbar-inhibit-functions nil)
+	tabbar-inhibit-functions '(tabbar-default-inhibit-function))
   (add-hook 'window-configuration-change-hook 'tabbar-window-update-tabsets-when-idle)
   (add-hook 'window-configuration-change-hook 'tabbar-reformat-all-tabsets)
   (add-hook 'first-change-hook 'tabbar-window-update-tabsets-when-idle)
